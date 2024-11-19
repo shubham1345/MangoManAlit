@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbMangoManModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblItem">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HSN" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UnitName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="PurchaseRate" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="SaleRate" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="rcdt" Type="datetime" Nullable="false" />
+          <Property Name="redt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblOpeningStock">
+          <Key>
+            <PropertyRef Name="OpeningStockID" />
+          </Key>
+          <Property Name="OpeningStockID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="rcdt" Type="datetime" Nullable="false" />
+          <Property Name="redt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblPurchase">
+          <Key>
+            <PropertyRef Name="PurchaseID" />
+          </Key>
+          <Property Name="PurchaseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseNo" Type="int" Nullable="false" />
+          <Property Name="PurchaseDate" Type="datetime" Nullable="false" />
+          <Property Name="PurchaseAmount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Narration" Type="varchar" MaxLength="500" />
+          <Property Name="rcdt" Type="datetime" Nullable="false" />
+          <Property Name="redt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblPurchaseProductDetail">
+          <Key>
+            <PropertyRef Name="PurchaseProductID" />
+          </Key>
+          <Property Name="PurchaseProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseID" Type="int" Nullable="false" />
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Rate" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Amount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblSale">
+          <Key>
+            <PropertyRef Name="SaleID" />
+          </Key>
+          <Property Name="SaleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleNo" Type="int" Nullable="false" />
+          <Property Name="SaleDate" Type="datetime" Nullable="false" />
+          <Property Name="SaleAmount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Narration" Type="varchar" MaxLength="500" />
+          <Property Name="rcdt" Type="datetime" Nullable="false" />
+          <Property Name="redt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblSaleProductDetail">
+          <Key>
+            <PropertyRef Name="SaleProductID" />
+          </Key>
+          <Property Name="SaleProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleID" Type="int" Nullable="false" />
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Amount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Rate" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <Association Name="FK_tblOpeningStock_tblItem">
+          <End Role="tblItem" Type="Self.tblItem" Multiplicity="1" />
+          <End Role="tblOpeningStock" Type="Self.tblOpeningStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="tblOpeningStock">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPurchaseProductDetail_tblItem">
+          <End Role="tblItem" Type="Self.tblItem" Multiplicity="1" />
+          <End Role="tblPurchaseProductDetail" Type="Self.tblPurchaseProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="tblPurchaseProductDetail">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPurchaseProductDetail_tblPurchase">
+          <End Role="tblPurchase" Type="Self.tblPurchase" Multiplicity="1" />
+          <End Role="tblPurchaseProductDetail" Type="Self.tblPurchaseProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPurchase">
+              <PropertyRef Name="PurchaseID" />
+            </Principal>
+            <Dependent Role="tblPurchaseProductDetail">
+              <PropertyRef Name="PurchaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSaleProductDetail_tblItem">
+          <End Role="tblItem" Type="Self.tblItem" Multiplicity="1" />
+          <End Role="tblSaleProductDetail" Type="Self.tblSaleProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="tblSaleProductDetail">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSaleProductDetail_tblSale">
+          <End Role="tblSale" Type="Self.tblSale" Multiplicity="1" />
+          <End Role="tblSaleProductDetail" Type="Self.tblSaleProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblSale">
+              <PropertyRef Name="SaleID" />
+            </Principal>
+            <Dependent Role="tblSaleProductDetail">
+              <PropertyRef Name="SaleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbMangoManModelStoreContainer">
+          <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblOpeningStock" EntityType="Self.tblOpeningStock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPurchase" EntityType="Self.tblPurchase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPurchaseProductDetail" EntityType="Self.tblPurchaseProductDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSale" EntityType="Self.tblSale" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSaleProductDetail" EntityType="Self.tblSaleProductDetail" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblOpeningStock_tblItem" Association="Self.FK_tblOpeningStock_tblItem">
+            <End Role="tblItem" EntitySet="tblItem" />
+            <End Role="tblOpeningStock" EntitySet="tblOpeningStock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPurchaseProductDetail_tblItem" Association="Self.FK_tblPurchaseProductDetail_tblItem">
+            <End Role="tblItem" EntitySet="tblItem" />
+            <End Role="tblPurchaseProductDetail" EntitySet="tblPurchaseProductDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPurchaseProductDetail_tblPurchase" Association="Self.FK_tblPurchaseProductDetail_tblPurchase">
+            <End Role="tblPurchase" EntitySet="tblPurchase" />
+            <End Role="tblPurchaseProductDetail" EntitySet="tblPurchaseProductDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSaleProductDetail_tblItem" Association="Self.FK_tblSaleProductDetail_tblItem">
+            <End Role="tblItem" EntitySet="tblItem" />
+            <End Role="tblSaleProductDetail" EntitySet="tblSaleProductDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSaleProductDetail_tblSale" Association="Self.FK_tblSaleProductDetail_tblSale">
+            <End Role="tblSale" EntitySet="tblSale" />
+            <End Role="tblSaleProductDetail" EntitySet="tblSaleProductDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbMangoManModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="dbMangoManEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblItems" EntityType="dbMangoManModel.tblItem" />
+          <EntitySet Name="tblOpeningStocks" EntityType="dbMangoManModel.tblOpeningStock" />
+          <EntitySet Name="tblPurchases" EntityType="dbMangoManModel.tblPurchase" />
+          <EntitySet Name="tblPurchaseProductDetails" EntityType="dbMangoManModel.tblPurchaseProductDetail" />
+          <EntitySet Name="tblSales" EntityType="dbMangoManModel.tblSale" />
+          <EntitySet Name="tblSaleProductDetails" EntityType="dbMangoManModel.tblSaleProductDetail" />
+          <AssociationSet Name="FK_tblOpeningStock_tblItem" Association="dbMangoManModel.FK_tblOpeningStock_tblItem">
+            <End Role="tblItem" EntitySet="tblItems" />
+            <End Role="tblOpeningStock" EntitySet="tblOpeningStocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPurchaseProductDetail_tblItem" Association="dbMangoManModel.FK_tblPurchaseProductDetail_tblItem">
+            <End Role="tblItem" EntitySet="tblItems" />
+            <End Role="tblPurchaseProductDetail" EntitySet="tblPurchaseProductDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSaleProductDetail_tblItem" Association="dbMangoManModel.FK_tblSaleProductDetail_tblItem">
+            <End Role="tblItem" EntitySet="tblItems" />
+            <End Role="tblSaleProductDetail" EntitySet="tblSaleProductDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPurchaseProductDetail_tblPurchase" Association="dbMangoManModel.FK_tblPurchaseProductDetail_tblPurchase">
+            <End Role="tblPurchase" EntitySet="tblPurchases" />
+            <End Role="tblPurchaseProductDetail" EntitySet="tblPurchaseProductDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSaleProductDetail_tblSale" Association="dbMangoManModel.FK_tblSaleProductDetail_tblSale">
+            <End Role="tblSale" EntitySet="tblSales" />
+            <End Role="tblSaleProductDetail" EntitySet="tblSaleProductDetails" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="tblItem">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HSN" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UnitName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PurchaseRate" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="SaleRate" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="rcdt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="redt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblOpeningStocks" Relationship="dbMangoManModel.FK_tblOpeningStock_tblItem" FromRole="tblItem" ToRole="tblOpeningStock" />
+          <NavigationProperty Name="tblPurchaseProductDetails" Relationship="dbMangoManModel.FK_tblPurchaseProductDetail_tblItem" FromRole="tblItem" ToRole="tblPurchaseProductDetail" />
+          <NavigationProperty Name="tblSaleProductDetails" Relationship="dbMangoManModel.FK_tblSaleProductDetail_tblItem" FromRole="tblItem" ToRole="tblSaleProductDetail" />
+        </EntityType>
+        <EntityType Name="tblOpeningStock">
+          <Key>
+            <PropertyRef Name="OpeningStockID" />
+          </Key>
+          <Property Name="OpeningStockID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="rcdt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="redt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblItem" Relationship="dbMangoManModel.FK_tblOpeningStock_tblItem" FromRole="tblOpeningStock" ToRole="tblItem" />
+        </EntityType>
+        <EntityType Name="tblPurchase">
+          <Key>
+            <PropertyRef Name="PurchaseID" />
+          </Key>
+          <Property Name="PurchaseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseNo" Type="Int32" Nullable="false" />
+          <Property Name="PurchaseDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PurchaseAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Narration" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="rcdt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="redt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblPurchaseProductDetails" Relationship="dbMangoManModel.FK_tblPurchaseProductDetail_tblPurchase" FromRole="tblPurchase" ToRole="tblPurchaseProductDetail" />
+        </EntityType>
+        <EntityType Name="tblPurchaseProductDetail">
+          <Key>
+            <PropertyRef Name="PurchaseProductID" />
+          </Key>
+          <Property Name="PurchaseProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseID" Type="Int32" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="tblItem" Relationship="dbMangoManModel.FK_tblPurchaseProductDetail_tblItem" FromRole="tblPurchaseProductDetail" ToRole="tblItem" />
+          <NavigationProperty Name="tblPurchase" Relationship="dbMangoManModel.FK_tblPurchaseProductDetail_tblPurchase" FromRole="tblPurchaseProductDetail" ToRole="tblPurchase" />
+        </EntityType>
+        <EntityType Name="tblSale">
+          <Key>
+            <PropertyRef Name="SaleID" />
+          </Key>
+          <Property Name="SaleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleNo" Type="Int32" Nullable="false" />
+          <Property Name="SaleDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SaleAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Narration" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="rcdt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="redt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblSaleProductDetails" Relationship="dbMangoManModel.FK_tblSaleProductDetail_tblSale" FromRole="tblSale" ToRole="tblSaleProductDetail" />
+        </EntityType>
+        <EntityType Name="tblSaleProductDetail">
+          <Key>
+            <PropertyRef Name="SaleProductID" />
+          </Key>
+          <Property Name="SaleProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleID" Type="Int32" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblItem" Relationship="dbMangoManModel.FK_tblSaleProductDetail_tblItem" FromRole="tblSaleProductDetail" ToRole="tblItem" />
+          <NavigationProperty Name="tblSale" Relationship="dbMangoManModel.FK_tblSaleProductDetail_tblSale" FromRole="tblSaleProductDetail" ToRole="tblSale" />
+        </EntityType>
+        <Association Name="FK_tblOpeningStock_tblItem">
+          <End Type="dbMangoManModel.tblItem" Role="tblItem" Multiplicity="1" />
+          <End Type="dbMangoManModel.tblOpeningStock" Role="tblOpeningStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="tblOpeningStock">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPurchaseProductDetail_tblItem">
+          <End Type="dbMangoManModel.tblItem" Role="tblItem" Multiplicity="1" />
+          <End Type="dbMangoManModel.tblPurchaseProductDetail" Role="tblPurchaseProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="tblPurchaseProductDetail">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSaleProductDetail_tblItem">
+          <End Type="dbMangoManModel.tblItem" Role="tblItem" Multiplicity="1" />
+          <End Type="dbMangoManModel.tblSaleProductDetail" Role="tblSaleProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="tblSaleProductDetail">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPurchaseProductDetail_tblPurchase">
+          <End Type="dbMangoManModel.tblPurchase" Role="tblPurchase" Multiplicity="1" />
+          <End Type="dbMangoManModel.tblPurchaseProductDetail" Role="tblPurchaseProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPurchase">
+              <PropertyRef Name="PurchaseID" />
+            </Principal>
+            <Dependent Role="tblPurchaseProductDetail">
+              <PropertyRef Name="PurchaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSaleProductDetail_tblSale">
+          <End Type="dbMangoManModel.tblSale" Role="tblSale" Multiplicity="1" />
+          <End Type="dbMangoManModel.tblSaleProductDetail" Role="tblSaleProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblSale">
+              <PropertyRef Name="SaleID" />
+            </Principal>
+            <Dependent Role="tblSaleProductDetail">
+              <PropertyRef Name="SaleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbMangoManModelStoreContainer" CdmEntityContainer="dbMangoManEntities">
+          <EntitySetMapping Name="tblItems">
+            <EntityTypeMapping TypeName="dbMangoManModel.tblItem">
+              <MappingFragment StoreEntitySet="tblItem">
+                <ScalarProperty Name="redt" ColumnName="redt" />
+                <ScalarProperty Name="rcdt" ColumnName="rcdt" />
+                <ScalarProperty Name="SaleRate" ColumnName="SaleRate" />
+                <ScalarProperty Name="PurchaseRate" ColumnName="PurchaseRate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="HSN" ColumnName="HSN" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblOpeningStocks">
+            <EntityTypeMapping TypeName="dbMangoManModel.tblOpeningStock">
+              <MappingFragment StoreEntitySet="tblOpeningStock">
+                <ScalarProperty Name="redt" ColumnName="redt" />
+                <ScalarProperty Name="rcdt" ColumnName="rcdt" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="OpeningStockID" ColumnName="OpeningStockID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchases">
+            <EntityTypeMapping TypeName="dbMangoManModel.tblPurchase">
+              <MappingFragment StoreEntitySet="tblPurchase">
+                <ScalarProperty Name="redt" ColumnName="redt" />
+                <ScalarProperty Name="rcdt" ColumnName="rcdt" />
+                <ScalarProperty Name="Narration" ColumnName="Narration" />
+                <ScalarProperty Name="PurchaseAmount" ColumnName="PurchaseAmount" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="PurchaseNo" ColumnName="PurchaseNo" />
+                <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchaseProductDetails">
+            <EntityTypeMapping TypeName="dbMangoManModel.tblPurchaseProductDetail">
+              <MappingFragment StoreEntitySet="tblPurchaseProductDetail">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
+                <ScalarProperty Name="PurchaseProductID" ColumnName="PurchaseProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSales">
+            <EntityTypeMapping TypeName="dbMangoManModel.tblSale">
+              <MappingFragment StoreEntitySet="tblSale">
+                <ScalarProperty Name="redt" ColumnName="redt" />
+                <ScalarProperty Name="rcdt" ColumnName="rcdt" />
+                <ScalarProperty Name="Narration" ColumnName="Narration" />
+                <ScalarProperty Name="SaleAmount" ColumnName="SaleAmount" />
+                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="SaleNo" ColumnName="SaleNo" />
+                <ScalarProperty Name="SaleID" ColumnName="SaleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSaleProductDetails">
+            <EntityTypeMapping TypeName="dbMangoManModel.tblSaleProductDetail">
+              <MappingFragment StoreEntitySet="tblSaleProductDetail">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="SaleID" ColumnName="SaleID" />
+                <ScalarProperty Name="SaleProductID" ColumnName="SaleProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
